@@ -18,7 +18,7 @@ class TestSd < BaseTest
     begin
       info = launch_server(@sd)
       assert info
-      sleep 10 # wait until server get ready
+      sleep 30 # wait until server get ready
       res = open("http://#{info["hostname"]}")
       assert res
       assert_equal res.status[0], "200"
