@@ -18,8 +18,17 @@ class TestSd < BaseTest
     begin
       info = launch_server(@sd)
       assert info
-      sleep 30 # wait until server get ready
-      res = open("http://#{info["hostname"]}")
+      # wait until rails became online
+      max_attempts = 40
+      attempts = 0
+      res = nil
+      while attempts <= max_attempts
+        attempts += 1
+        res = open("http://#{info["hostname"]}") rescue nil
+        puts "Checking response:#{res.inspect}"
+        break if res && res.status[0] == "200"
+        sleep 3
+      end
       assert res
       assert_equal res.status[0], "200"
     ensure

@@ -9,7 +9,9 @@ require 'uber_config'
 class BaseTest < ActiveSupport::TestCase
 
   def terminate_all_servers(sd)
+    puts "Terminating all servers"
     sd.servers_list.each do |server|
+      puts "Terminating:#{server.inspect}"
       assert sd.terminate_server(server["id"]), "Can't terminate server"
     end
   end
