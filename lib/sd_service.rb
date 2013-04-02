@@ -2,11 +2,23 @@ require 'active_support/core_ext'
 require 'aws'
 require 'appoxy_api'
 
+#workaround for timeouts, should be implemented in appoxy_api gem
+module RestClient
+  class Request
+    def self.execute(args, & block)
+      puts "Execute called with following arguments:#{args.inspect}"
+      args.merge!({:timeout => 600, :open_timeout => 600})
+      new(args).execute(& block)
+    end
+  end
+end
+
+
 class SDService < Appoxy::Api::Client
   attr_accessor :project_id
 
   def initialize(access_key, secret_key,options={})
-    super(options[:host] || "http://www.simpledeployer.com/api/", access_key, secret_key, {:timeout => 600, :open_timeout => 600})
+    super(options[:host] || "http://www.simpledeployer.com/api/", access_key, secret_key)
     #puts "SD #{access_key}, #{secret_key}"
     self.version = "0.3"
   end
