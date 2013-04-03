@@ -71,7 +71,7 @@ class SDService < Appoxy::Api::Client
     details = {}
     server_status = %w'not started terminated'
     launch_status = %w'error complete cancelled'
-    while x < 200
+    while x < 300
       details = get_server_info(server_id)
       puts "Details:#{details['launch_status']}" if details['launch_status']
       break if details && details['status']&& details['launch_status'] &&
